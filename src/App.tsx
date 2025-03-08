@@ -74,6 +74,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
             <Route path="*" element={<Navigate to="/landing" replace />} />
             {import.meta.env.VITE_TEMPO === "true" && (
               <Route path="/tempobook/*" />

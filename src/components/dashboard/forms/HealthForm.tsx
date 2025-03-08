@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/components/auth/AuthContext";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const healthFormSchema = z.object({
   animalId: z.string().min(1, "Selecciona un animal"),
@@ -41,6 +43,7 @@ export function HealthForm({ onSuccess }: { onSuccess?: () => void }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const form = useForm<HealthFormValues>({
     resolver: zodResolver(healthFormSchema),
@@ -58,11 +61,15 @@ export function HealthForm({ onSuccess }: { onSuccess?: () => void }) {
 
   useEffect(() => {
     async function fetchAnimals() {
+      if (!user) return;
+
       try {
         setIsLoading(true);
+        // Ensure we only fetch animals belonging to the current user
         const { data, error } = await supabase
           .from("animals")
-          .select("id, name, tag");
+          .select("id, name, tag")
+          .eq("user_id", user.id);
 
         if (error) throw error;
 
@@ -85,18 +92,40 @@ export function HealthForm({ onSuccess }: { onSuccess?: () => void }) {
     }
 
     fetchAnimals();
-  }, [toast]);
+  }, [toast, user]);
 
   async function onSubmit(data: HealthFormValues) {
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Debes iniciar sesión para actualizar el estado de salud",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
+      // First verify the animal belongs to the current user
+      const { data: animalData, error: animalError } = await supabase
+        .from("animals")
+        .select("id")
+        .eq("id", data.animalId)
+        .eq("user_id", user.id)
+        .single();
+
+      if (animalError) {
+        throw new Error("No tienes permiso para actualizar este animal");
+      }
+
       const { error } = await supabase
         .from("animals")
         .update({
           status: data.status,
         })
-        .eq("id", data.animalId);
+        .eq("id", data.animalId)
+        .eq("user_id", user.id);
 
       if (error) throw error;
 
@@ -122,7 +151,10 @@ export function HealthForm({ onSuccess }: { onSuccess?: () => void }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
-        <div className="max-h-[400px] overflow-y-auto pr-2">
+        <ScrollArea className="h-[400px] pr-4">
+          <h2 className="text-xl font-semibold mb-4">
+            Actualizar Estado de Salud
+          </h2>
           <FormField
             control={form.control}
             name="animalId"
@@ -272,14 +304,14 @@ export function HealthForm({ onSuccess }: { onSuccess?: () => void }) {
               </FormItem>
             )}
           />
-        </div>
-        <Button
-          type="submit"
-          className="w-full mt-4"
-          disabled={isSubmitting || isLoading}
-        >
-          {isSubmitting ? "Actualizando..." : "Actualizar Estado"}
-        </Button>
+          <Button
+            type="submit"
+            className="w-full mt-8"
+            disabled={isSubmitting || isLoading}
+          >
+            {isSubmitting ? "Actualizando..." : "Actualizar Estado"}
+          </Button>
+        </ScrollArea>
       </form>
     </Form>
   );

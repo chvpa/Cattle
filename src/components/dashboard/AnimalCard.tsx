@@ -38,6 +38,10 @@ type Animal = {
   status: string;
   earTag: string;
   createdAt: string;
+  owner: string;
+  weight: string;
+  farm: string;
+  purpose: string;
 };
 
 type Vaccine = {
@@ -79,6 +83,10 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
           status: animalData.status,
           earTag: animalData.ear_tag,
           createdAt: animalData.created_at,
+          owner: animalData.owner || "-",
+          weight: animalData.weight || "-",
+          farm: animalData.farm || "-",
+          purpose: animalData.purpose || "-",
         });
 
         // Fetch vaccines for this animal
@@ -190,7 +198,7 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] w-[95vw] max-w-[95vw] sm:w-auto overflow-hidden">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] h-[80vh] w-[95vw] max-w-[95vw] sm:w-auto overflow-hidden">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2">
             <Tag className="h-5 w-5" />
@@ -204,10 +212,14 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
           </div>
         ) : animal ? (
           <Tabs defaultValue="info" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="info" className="flex items-center gap-1">
                 <Info className="h-4 w-4" />
                 Información
+              </TabsTrigger>
+              <TabsTrigger value="health" className="flex items-center gap-1">
+                <Info className="h-4 w-4" />
+                Salud
               </TabsTrigger>
               <TabsTrigger value="vaccines" className="flex items-center gap-1">
                 <Syringe className="h-4 w-4" />
@@ -279,9 +291,80 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
                     </div>
                   </div>
 
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">Raza</p>
+                      <p>{animal.breed}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">Propietario</p>
+                      <p>{animal.owner}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">Peso</p>
+                      <p>{animal.weight} kg</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">Finca</p>
+                      <p>{animal.farm}</p>
+                    </div>
+                  </div>
+
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">Raza</p>
-                    <p>{animal.breed}</p>
+                    <p className="text-sm font-medium">Propósito</p>
+                    <p>
+                      {animal.purpose === "fattening"
+                        ? "Engorde"
+                        : animal.purpose === "breeding"
+                          ? "Cría"
+                          : animal.purpose === "sale"
+                            ? "Venta"
+                            : animal.purpose}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="health" className="mt-4">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Estado de Salud</CardTitle>
+                  <CardDescription>
+                    Información de salud de {animal.name}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-medium">Estado Actual</h3>
+                    <div
+                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${getStatusColor(
+                        animal.status,
+                      )}`}
+                    >
+                      {getStatusText(animal.status)}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-medium">Historial de Salud</h3>
+                    <p className="text-sm text-muted-foreground">
+                      No hay registros de salud adicionales disponibles.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-medium">Recomendaciones</h3>
+                    <p className="text-sm bg-muted p-2 rounded-md">
+                      {animal.status === "healthy"
+                        ? "Mantener el régimen de vacunación al día y realizar chequeos periódicos."
+                        : animal.status === "pregnant"
+                          ? "Monitorear regularmente y proporcionar nutrición adecuada para la gestación."
+                          : "Seguir el tratamiento prescrito y mantener en observación."}
+                    </p>
                   </div>
                 </CardContent>
               </Card>

@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -46,6 +47,7 @@ export function VaccineForm({ onSuccess }: { onSuccess?: () => void }) {
       if (!user) return;
 
       try {
+        // Ensure we only fetch animals belonging to the current user
         const { data, error } = await supabase
           .from("animals")
           .select("id, name, tag")
@@ -131,55 +133,31 @@ export function VaccineForm({ onSuccess }: { onSuccess?: () => void }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
-        <FormField
-          control={form.control}
-          name="animalId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Animal</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Seleccionar animal" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {animals.map((animal) => (
-                    <SelectItem key={animal.id} value={animal.id}>
-                      {animal.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="vaccineType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tipo de Vacuna</FormLabel>
-              <FormControl>
-                <Input placeholder="Fiebre Aftosa" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <ScrollArea className="h-[400px] pr-4">
+          <h2 className="text-xl font-semibold mb-4">Nueva Vacuna</h2>
           <FormField
             control={form.control}
-            name="date"
+            name="animalId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Fecha de Aplicación</FormLabel>
-                <FormControl>
-                  <Input type="date" {...field} />
-                </FormControl>
+                <FormLabel>Animal</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Seleccionar animal" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {animals.map((animal) => (
+                      <SelectItem key={animal.id} value={animal.id}>
+                        {animal.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -187,44 +165,74 @@ export function VaccineForm({ onSuccess }: { onSuccess?: () => void }) {
 
           <FormField
             control={form.control}
-            name="nextDate"
+            name="vaccineType"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Próxima Aplicación</FormLabel>
+                <FormLabel>Tipo de Vacuna</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <Input placeholder="Fiebre Aftosa" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-        </div>
 
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notas</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Observaciones adicionales sobre la vacunación"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Fecha de Aplicación</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={isSubmitting || isLoading}
-        >
-          {isSubmitting ? "Registrando..." : "Registrar Vacuna"}
-        </Button>
+            <FormField
+              control={form.control}
+              name="nextDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Próxima Aplicación</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <FormField
+            control={form.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Notas</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Observaciones adicionales sobre la vacunación"
+                    className="resize-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button
+            type="submit"
+            className="w-full mt-8"
+            disabled={isSubmitting || isLoading}
+          >
+            {isSubmitting ? "Registrando..." : "Registrar Vacuna"}
+          </Button>
+        </ScrollArea>
       </form>
     </Form>
   );

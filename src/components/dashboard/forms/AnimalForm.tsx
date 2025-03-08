@@ -39,6 +39,16 @@ const animalFormSchema = z.object({
   owner: z.string().min(2, "El propietario es requerido"),
   purpose: z.enum(["fattening", "breeding", "sale"]),
   farm: z.string().min(2, "La finca es requerida"),
+  category: z.enum([
+    "vaca",
+    "vaquilla",
+    "novillo",
+    "toro",
+    "desmamante_macho",
+    "desmamante_hembra",
+    "ternero",
+    "bueye",
+  ]),
 });
 
 type AnimalFormValues = z.infer<typeof animalFormSchema>;
@@ -63,6 +73,7 @@ export function AnimalForm({ onSuccess }: { onSuccess?: () => void }) {
       owner: "",
       purpose: "fattening",
       farm: "",
+      category: "vaca",
     },
   });
 
@@ -79,6 +90,7 @@ export function AnimalForm({ onSuccess }: { onSuccess?: () => void }) {
     setIsSubmitting(true);
 
     try {
+      // Make sure we're inserting with the current user's ID
       const { error } = await supabase.from("animals").insert({
         tag: data.tag,
         name: data.name,
@@ -92,6 +104,7 @@ export function AnimalForm({ onSuccess }: { onSuccess?: () => void }) {
         owner: data.owner,
         purpose: data.purpose,
         farm: data.farm,
+        category: data.category,
         user_id: user.id,
       });
 
@@ -377,6 +390,41 @@ export function AnimalForm({ onSuccess }: { onSuccess?: () => void }) {
                 <FormControl>
                   <Input placeholder="El Paraíso" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Categoría</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Seleccionar categoría" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="vaca">Vaca</SelectItem>
+                    <SelectItem value="vaquilla">Vaquilla</SelectItem>
+                    <SelectItem value="novillo">Novillo</SelectItem>
+                    <SelectItem value="toro">Toro</SelectItem>
+                    <SelectItem value="desmamante_macho">
+                      Desmamante Macho
+                    </SelectItem>
+                    <SelectItem value="desmamante_hembra">
+                      Desmamante Hembra
+                    </SelectItem>
+                    <SelectItem value="ternero">Ternero</SelectItem>
+                    <SelectItem value="bueye">Bueye</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}

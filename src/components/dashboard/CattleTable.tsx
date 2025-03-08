@@ -43,6 +43,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { AnimalCard } from "./AnimalCard";
 import { EditAnimalForm } from "./forms/EditAnimalForm";
 
@@ -56,6 +63,7 @@ type Cattle = {
   breed: string;
   status: string;
   earTag: string;
+  owner: string;
 };
 
 export function CattleTable() {
@@ -95,6 +103,7 @@ export function CattleTable() {
             status:
               animal.status.charAt(0).toUpperCase() + animal.status.slice(1),
             earTag: animal.ear_tag,
+            owner: animal.owner || "-",
           })),
         );
       } catch (error) {
@@ -216,8 +225,10 @@ export function CattleTable() {
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
             <Select
-              value={filterColumn || ""}
-              onValueChange={(value) => setFilterColumn(value || null)}
+              value={filterColumn || "none"}
+              onValueChange={(value) =>
+                setFilterColumn(value === "none" ? null : value)
+              }
             >
               <SelectTrigger className="w-[130px]">
                 <div className="flex items-center gap-2">
@@ -226,7 +237,7 @@ export function CattleTable() {
                 </div>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Sin filtro</SelectItem>
+                <SelectItem value="none">Sin filtro</SelectItem>
                 <SelectItem value="tag">Tag</SelectItem>
                 <SelectItem value="name">Nombre</SelectItem>
                 <SelectItem value="gender">Género</SelectItem>
@@ -261,6 +272,7 @@ export function CattleTable() {
               </TableHead>
               <TableHead className="whitespace-nowrap">Fecha Ingreso</TableHead>
               <TableHead className="whitespace-nowrap">Raza</TableHead>
+              <TableHead className="whitespace-nowrap">Propietario</TableHead>
               <TableHead className="whitespace-nowrap">Caravana</TableHead>
               <TableHead className="whitespace-nowrap">Estado</TableHead>
               <TableHead className="w-[80px] whitespace-nowrap">
@@ -272,7 +284,7 @@ export function CattleTable() {
             {isLoading ? (
               <TableRow>
                 <TableCell
-                  colSpan={9}
+                  colSpan={10}
                   className="text-center h-24 text-muted-foreground"
                 >
                   Cargando datos...
@@ -281,7 +293,7 @@ export function CattleTable() {
             ) : filteredCattle.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={9}
+                  colSpan={10}
                   className="text-center h-24 text-muted-foreground"
                 >
                   No se encontraron resultados.
@@ -307,6 +319,9 @@ export function CattleTable() {
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
                     {animal.breed}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    {animal.owner}
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
                     <div className="flex items-center">

@@ -14,9 +14,15 @@ import { VaccineForm } from "./forms/VaccineForm";
 import { HealthForm } from "./forms/HealthForm";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-export function Header() {
+type HeaderProps = {
+  className?: string;
+};
+
+export function Header({ className = "" }: HeaderProps) {
   return (
-    <div className="flex items-center justify-between p-4 border-b bg-card">
+    <div
+      className={`flex items-center justify-between p-4 border-b bg-card ${className}`}
+    >
       <div className="flex items-center gap-3">
         <Sheet>
           <SheetTrigger asChild>

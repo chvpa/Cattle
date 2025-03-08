@@ -9,7 +9,7 @@ export function MetricsGrid() {
     totalCattle: 0,
     genderDistribution: { male: 0, female: 0 },
     pregnancyStatus: { pregnant: 0, notPregnant: 0 },
-    averageAge: 0,
+    averageWeight: 0,
   });
   const { user } = useAuth();
 
@@ -37,22 +37,18 @@ export function MetricsGrid() {
         const pregnant = animals.filter((a) => a.status === "pregnant").length;
         const notPregnant = females - pregnant;
 
-        // Calculate average age
-        const today = new Date();
-        const ages = animals.map((animal) => {
-          const birthDate = new Date(animal.birth_date);
-          const ageInYears =
-            (today.getTime() - birthDate.getTime()) /
-            (1000 * 60 * 60 * 24 * 365.25);
-          return ageInYears;
-        });
+        // Calculate average weight
+        const weights = animals
+          .filter((animal) => animal.weight) // Filter out animals without weight
+          .map((animal) => parseFloat(animal.weight));
 
-        const averageAge =
-          ages.length > 0
+        const averageWeight =
+          weights.length > 0
             ? parseFloat(
-                (ages.reduce((sum, age) => sum + age, 0) / ages.length).toFixed(
-                  1,
-                ),
+                (
+                  weights.reduce((sum, weight) => sum + weight, 0) /
+                  weights.length
+                ).toFixed(1),
               )
             : 0;
 
@@ -60,7 +56,7 @@ export function MetricsGrid() {
           totalCattle,
           genderDistribution: { male: males, female: females },
           pregnancyStatus: { pregnant, notPregnant },
-          averageAge,
+          averageWeight,
         });
       } catch (error) {
         console.error("Error fetching metrics:", error);
@@ -137,11 +133,11 @@ export function MetricsGrid() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Edad Promedio</CardTitle>
+          <CardTitle className="text-sm font-medium">Peso Promedio</CardTitle>
           <Calendar className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{metrics.averageAge} años</div>
+          <div className="text-2xl font-bold">{metrics.averageWeight} kg</div>
           <p className="text-xs text-muted-foreground">Promedio del ganado</p>
         </CardContent>
       </Card>
