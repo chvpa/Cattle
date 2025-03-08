@@ -164,8 +164,8 @@ export function CattleTable() {
           animal.status.toLowerCase().includes(filterValue.toLowerCase()) ||
           (animal.status === "Healthy" &&
             filterValue.toLowerCase() === "saludable") ||
-          (animal.status === "Pregnant" &&
-            filterValue.toLowerCase() === "preñada") ||
+          (animal.status === "Critical" &&
+            filterValue.toLowerCase() === "crítico") ||
           (animal.status === "Sick" && filterValue.toLowerCase() === "enfermo")
         );
       default:
@@ -336,15 +336,15 @@ export function CattleTable() {
                       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                         animal.status === "Healthy"
                           ? "bg-green-100 text-green-800"
-                          : animal.status === "Pregnant"
-                            ? "bg-blue-100 text-blue-800"
+                          : animal.status === "Critical"
+                            ? "bg-red-100 text-red-800"
                             : "bg-red-100 text-red-800"
                       }`}
                     >
                       {animal.status === "Healthy"
                         ? "Saludable"
-                        : animal.status === "Pregnant"
-                          ? "Preñada"
+                        : animal.status === "Critical"
+                          ? "Crítico"
                           : "Enfermo"}
                     </div>
                   </TableCell>

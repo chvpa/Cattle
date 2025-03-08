@@ -12,7 +12,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Beef className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold">Senda</h1>
+            <h1 className="text-2xl font-bold">Cattle</h1>
           </div>
           <Button onClick={() => navigate("/login")} className="px-6">
             Iniciar Sesión
@@ -137,8 +137,8 @@ export default function LandingPage() {
             Comienza a gestionar tu ganado hoy mismo
           </h2>
           <p className="text-xl opacity-90 max-w-2xl mx-auto mb-8">
-            Únete a cientos de ganaderos que ya confían en Senda para la gestión
-            de su ganado.
+            Únete a cientos de ganaderos que ya confían en Cattle para la
+            gestión de su ganado.
           </p>
           <Button
             size="lg"
@@ -157,10 +157,10 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">
               <Beef className="h-5 w-5 text-primary" />
-              <span className="font-bold">Senda</span>
+              <span className="font-bold">Cattle</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Senda. Todos los derechos
+              © {new Date().getFullYear()} Cattle. Todos los derechos
               reservados.
             </p>
           </div>

@@ -55,7 +55,7 @@ export function LoginForm() {
   return (
     <Card className="w-[95%] max-w-[350px] mx-auto">
       <CardHeader>
-        <CardTitle>Senda</CardTitle>
+        <CardTitle>Cattle</CardTitle>
         <CardDescription>Gestión de ganado</CardDescription>
       </CardHeader>
       <Tabs defaultValue="login">

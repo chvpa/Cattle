@@ -13,13 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
@@ -133,7 +127,7 @@ export function VaccineForm({ onSuccess }: { onSuccess?: () => void }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
-        <ScrollArea className="h-[400px] pr-4">
+        <ScrollArea className="h-[400px] px-2 py-2">
           <h2 className="text-xl font-semibold mb-4">Nueva Vacuna</h2>
           <FormField
             control={form.control}
@@ -141,23 +135,20 @@ export function VaccineForm({ onSuccess }: { onSuccess?: () => void }) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Animal</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Seleccionar animal" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {animals.map((animal) => (
-                      <SelectItem key={animal.id} value={animal.id}>
-                        {animal.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <FormControl>
+                  <Combobox
+                    options={animals.map((animal) => ({
+                      value: animal.id,
+                      label: animal.name,
+                    }))}
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="Seleccionar animal"
+                    searchPlaceholder="Buscar animal por nombre o tag..."
+                    emptyMessage="No se encontraron animales"
+                    disabled={isLoading}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

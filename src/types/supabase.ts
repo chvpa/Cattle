@@ -13,6 +13,7 @@ export type Database = {
         Row: {
           birth_date: string
           breed: string
+          category: string | null
           created_at: string | null
           ear_tag: string | null
           entry_date: string | null
@@ -21,6 +22,7 @@ export type Database = {
           id: string
           name: string
           owner: string | null
+          paddock: string | null
           purpose: string | null
           status: string
           tag: string
@@ -30,6 +32,7 @@ export type Database = {
         Insert: {
           birth_date: string
           breed: string
+          category?: string | null
           created_at?: string | null
           ear_tag?: string | null
           entry_date?: string | null
@@ -38,6 +41,7 @@ export type Database = {
           id?: string
           name: string
           owner?: string | null
+          paddock?: string | null
           purpose?: string | null
           status: string
           tag: string
@@ -47,6 +51,7 @@ export type Database = {
         Update: {
           birth_date?: string
           breed?: string
+          category?: string | null
           created_at?: string | null
           ear_tag?: string | null
           entry_date?: string | null
@@ -55,6 +60,7 @@ export type Database = {
           id?: string
           name?: string
           owner?: string | null
+          paddock?: string | null
           purpose?: string | null
           status?: string
           tag?: string
@@ -62,6 +68,63 @@ export type Database = {
           weight?: string | null
         }
         Relationships: []
+      }
+      reproductions: {
+        Row: {
+          actual_birth_date: string | null
+          created_at: string | null
+          expected_birth_date: string
+          father_id: string
+          id: string
+          mother_id: string
+          notes: string | null
+          service_date: string
+          service_method: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          actual_birth_date?: string | null
+          created_at?: string | null
+          expected_birth_date: string
+          father_id: string
+          id?: string
+          mother_id: string
+          notes?: string | null
+          service_date: string
+          service_method: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          actual_birth_date?: string | null
+          created_at?: string | null
+          expected_birth_date?: string
+          father_id?: string
+          id?: string
+          mother_id?: string
+          notes?: string | null
+          service_date?: string
+          service_method?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reproductions_father_id_fkey"
+            columns: ["father_id"]
+            isOneToOne: false
+            referencedRelation: "animals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reproductions_mother_id_fkey"
+            columns: ["mother_id"]
+            isOneToOne: false
+            referencedRelation: "animals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vaccines: {
         Row: {

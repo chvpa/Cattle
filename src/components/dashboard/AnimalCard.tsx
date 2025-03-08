@@ -146,8 +146,8 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
         return "Saludable";
       case "sick":
         return "Enfermo";
-      case "pregnant":
-        return "Preñada";
+      case "critical":
+        return "Crítico";
       default:
         return status;
     }
@@ -159,8 +159,8 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
         return "bg-green-100 text-green-800";
       case "sick":
         return "bg-red-100 text-red-800";
-      case "pregnant":
-        return "bg-blue-100 text-blue-800";
+      case "critical":
+        return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -308,22 +308,14 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
                       <p>{animal.weight} kg</p>
                     </div>
                     <div className="space-y-1">
-                      <p className="text-sm font-medium">Finca</p>
+                      <p className="text-sm font-medium">Hacienda</p>
                       <p>{animal.farm}</p>
                     </div>
                   </div>
 
                   <div className="space-y-1">
                     <p className="text-sm font-medium">Propósito</p>
-                    <p>
-                      {animal.purpose === "fattening"
-                        ? "Engorde"
-                        : animal.purpose === "breeding"
-                          ? "Cría"
-                          : animal.purpose === "sale"
-                            ? "Venta"
-                            : animal.purpose}
-                    </p>
+                    <p>{animal.purpose || "No especificado"}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -361,8 +353,8 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
                     <p className="text-sm bg-muted p-2 rounded-md">
                       {animal.status === "healthy"
                         ? "Mantener el régimen de vacunación al día y realizar chequeos periódicos."
-                        : animal.status === "pregnant"
-                          ? "Monitorear regularmente y proporcionar nutrición adecuada para la gestación."
+                        : animal.status === "critical"
+                          ? "Monitorear constantemente y proporcionar atención veterinaria inmediata."
                           : "Seguir el tratamiento prescrito y mantener en observación."}
                     </p>
                   </div>

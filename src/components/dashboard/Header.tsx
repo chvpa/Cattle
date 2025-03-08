@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimalForm } from "./forms/AnimalForm";
 import { VaccineForm } from "./forms/VaccineForm";
 import { HealthForm } from "./forms/HealthForm";
+import { ReproductionForm } from "./forms/ReproductionForm";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 type HeaderProps = {
@@ -47,7 +48,7 @@ export function Header({ className = "" }: HeaderProps) {
             </div>
           </SheetContent>
         </Sheet>
-        <h1 className="text-xl md:text-2xl font-bold">Senda</h1>
+        <h1 className="text-xl md:text-2xl font-bold">Cattle</h1>
       </div>
 
       <div className="flex items-center gap-2 md:gap-4">
@@ -59,15 +60,24 @@ export function Header({ className = "" }: HeaderProps) {
               <span className="sm:hidden">Añadir</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] w-[95vw] max-w-[95vw] sm:w-auto">
+          <DialogContent className="sm:max-w-[425px] w-[95vw] max-w-[95vw] sm:w-auto overflow-hidden">
             <DialogHeader>
               <DialogTitle>Añadir Datos</DialogTitle>
             </DialogHeader>
             <Tabs defaultValue="animal" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="animal">Nuevo Animal</TabsTrigger>
-                <TabsTrigger value="vaccine">Nueva Vacuna</TabsTrigger>
-                <TabsTrigger value="health">Salud</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-4 overflow-x-auto">
+                <TabsTrigger value="animal" className="whitespace-nowrap">
+                  Nuevo Animal
+                </TabsTrigger>
+                <TabsTrigger value="vaccine" className="whitespace-nowrap">
+                  Vacuna
+                </TabsTrigger>
+                <TabsTrigger value="health" className="whitespace-nowrap">
+                  Salud
+                </TabsTrigger>
+                <TabsTrigger value="reproduction" className="whitespace-nowrap">
+                  Reproducción
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="animal">
                 <AnimalForm
@@ -85,6 +95,13 @@ export function Header({ className = "" }: HeaderProps) {
               </TabsContent>
               <TabsContent value="health">
                 <HealthForm
+                  onSuccess={() =>
+                    document.querySelector("[data-radix-dialog-close]")?.click()
+                  }
+                />
+              </TabsContent>
+              <TabsContent value="reproduction">
+                <ReproductionForm
                   onSuccess={() =>
                     document.querySelector("[data-radix-dialog-close]")?.click()
                   }

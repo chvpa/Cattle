@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/components/auth/AuthContext";
@@ -33,12 +34,12 @@ const animalFormSchema = z.object({
   birthDate: z.string(),
   entryDate: z.string(),
   breed: z.string().min(2, "La raza debe tener al menos 2 caracteres"),
-  status: z.enum(["healthy", "sick", "pregnant"]),
+  status: z.enum(["healthy", "sick", "critical"]),
   earTag: z.enum(["red", "green", "yellow", "sky"]),
   weight: z.string().min(1, "El peso es requerido"),
   owner: z.string().min(2, "El propietario es requerido"),
-  purpose: z.enum(["fattening", "breeding", "sale"]),
-  farm: z.string().min(2, "La finca es requerida"),
+  farm: z.string().min(2, "La hacienda es requerida"),
+  paddock: z.string().min(1, "El potrero es requerido"),
   category: z.enum([
     "vaca",
     "vaquilla",
@@ -71,8 +72,8 @@ export function AnimalForm({ onSuccess }: { onSuccess?: () => void }) {
       earTag: "red",
       weight: "",
       owner: "",
-      purpose: "fattening",
       farm: "",
+      paddock: "",
       category: "vaca",
     },
   });
@@ -102,8 +103,8 @@ export function AnimalForm({ onSuccess }: { onSuccess?: () => void }) {
         ear_tag: data.earTag,
         weight: data.weight,
         owner: data.owner,
-        purpose: data.purpose,
         farm: data.farm,
+        paddock: data.paddock,
         category: data.category,
         user_id: user.id,
       });
@@ -132,7 +133,7 @@ export function AnimalForm({ onSuccess }: { onSuccess?: () => void }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
-        <ScrollArea className="h-[400px] pr-4">
+        <ScrollArea className="h-[400px] px-2 py-2">
           <h2 className="text-xl font-semibold mb-4">Nuevo Animal</h2>
 
           <FormField
@@ -317,7 +318,7 @@ export function AnimalForm({ onSuccess }: { onSuccess?: () => void }) {
                     <SelectContent>
                       <SelectItem value="healthy">Saludable</SelectItem>
                       <SelectItem value="sick">Enfermo</SelectItem>
-                      <SelectItem value="pregnant">Preñada</SelectItem>
+                      <SelectItem value="critical">Crítico</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -353,47 +354,37 @@ export function AnimalForm({ onSuccess }: { onSuccess?: () => void }) {
                 </FormItem>
               )}
             />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="farm"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Hacienda</FormLabel>
+                  <FormControl>
+                    <Input placeholder="El Paraíso" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
-              name="purpose"
+              name="paddock"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Propósito</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccionar propósito" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="fattening">Engorde</SelectItem>
-                      <SelectItem value="breeding">Cría</SelectItem>
-                      <SelectItem value="sale">Venta</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormLabel>Potrero</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Potrero #1" {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-
-          <FormField
-            control={form.control}
-            name="farm"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Finca</FormLabel>
-                <FormControl>
-                  <Input placeholder="El Paraíso" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <FormField
             control={form.control}

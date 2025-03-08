@@ -200,7 +200,7 @@ export function Reports() {
 
       // Add title
       doc.setFontSize(18);
-      doc.text("Reporte de Actividades - Senda", 14, 22);
+      doc.text("Reporte de Actividades - Cattle", 14, 22);
 
       // Add date
       doc.setFontSize(11);
@@ -337,7 +337,7 @@ export function Reports() {
       );
 
       // Save the PDF
-      doc.save(`reporte-senda-${format(new Date(), "yyyyMMdd")}.pdf`);
+      doc.save(`reporte-cattle-${format(new Date(), "yyyyMMdd")}.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
       alert("Hubo un error al generar el PDF. Por favor, intente de nuevo.");
