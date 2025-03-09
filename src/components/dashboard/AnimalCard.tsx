@@ -42,6 +42,8 @@ type Animal = {
   weight: string;
   farm: string;
   purpose: string;
+  category: string;
+  paddock: string;
 };
 
 type Vaccine = {
@@ -87,6 +89,8 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
           weight: animalData.weight || "-",
           farm: animalData.farm || "-",
           purpose: animalData.purpose || "-",
+          category: animalData.category || "-",
+          paddock: animalData.paddock || "-",
         });
 
         // Fetch vaccines for this animal
@@ -198,7 +202,7 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] h-[80vh] w-[95vw] max-w-[95vw] sm:w-auto overflow-hidden">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] h-[80vh] w-[95vw] max-w-[95vw] sm:w-auto overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2">
             <Tag className="h-5 w-5" />
@@ -211,7 +215,7 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
             <p>Cargando información...</p>
           </div>
         ) : animal ? (
-          <Tabs defaultValue="info" className="w-full">
+          <Tabs defaultValue="info" className="w-full flex-1 flex flex-col">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="info" className="flex items-center gap-1">
                 <Info className="h-4 w-4" />
@@ -227,7 +231,7 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="info" className="mt-4">
+            <TabsContent value="info" className="mt-4 flex-1 overflow-auto">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">
@@ -238,7 +242,7 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
                     Registrado el {formatDate(animal.createdAt)}
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-4 pb-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <p className="text-sm font-medium">Género</p>
@@ -317,11 +321,21 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
                     <p className="text-sm font-medium">Propósito</p>
                     <p>{animal.purpose || "No especificado"}</p>
                   </div>
+
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">Categoría</p>
+                    <p>{animal.category || "No especificado"}</p>
+                  </div>
+
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">Potrero</p>
+                    <p>{animal.paddock || "No especificado"}</p>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
 
-            <TabsContent value="health" className="mt-4">
+            <TabsContent value="health" className="mt-4 flex-1 overflow-auto">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">Estado de Salud</CardTitle>
@@ -362,7 +376,7 @@ export function AnimalCard({ animalId, open, onOpenChange }: AnimalCardProps) {
               </Card>
             </TabsContent>
 
-            <TabsContent value="vaccines" className="mt-4">
+            <TabsContent value="vaccines" className="mt-4 flex-1 overflow-auto">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">

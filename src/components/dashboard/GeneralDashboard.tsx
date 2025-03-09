@@ -412,9 +412,13 @@ export function GeneralDashboard() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos los propietarios</SelectItem>
-              <SelectItem value="Juan Pérez">Juan Pérez</SelectItem>
-              <SelectItem value="María González">María González</SelectItem>
-              <SelectItem value="Carlos Rodríguez">Carlos Rodríguez</SelectItem>
+              {ownershipData
+                .filter((item) => item.name !== "Sin datos")
+                .map((owner) => (
+                  <SelectItem key={owner.name} value={owner.name}>
+                    {owner.name}
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
 

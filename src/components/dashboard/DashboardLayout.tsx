@@ -14,7 +14,11 @@ export default function DashboardLayout() {
 
   return (
     <div className="min-h-screen bg-background max-w-[100vw] overflow-hidden">
-      <Header className="sticky top-0 z-10" />
+      <Header
+        className="sticky top-0 z-10"
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+      />
 
       <div className="flex flex-row h-[calc(100vh-64px)]">
         <Sidebar

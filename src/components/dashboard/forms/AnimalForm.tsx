@@ -45,8 +45,7 @@ const animalFormSchema = z.object({
     "vaquilla",
     "novillo",
     "toro",
-    "desmamante_macho",
-    "desmamante_hembra",
+    "desmamante",
     "ternero",
     "bueye",
   ]),
@@ -406,12 +405,7 @@ export function AnimalForm({ onSuccess }: { onSuccess?: () => void }) {
                     <SelectItem value="vaquilla">Vaquilla</SelectItem>
                     <SelectItem value="novillo">Novillo</SelectItem>
                     <SelectItem value="toro">Toro</SelectItem>
-                    <SelectItem value="desmamante_macho">
-                      Desmamante Macho
-                    </SelectItem>
-                    <SelectItem value="desmamante_hembra">
-                      Desmamante Hembra
-                    </SelectItem>
+                    <SelectItem value="desmamante">Desmamante</SelectItem>
                     <SelectItem value="ternero">Ternero</SelectItem>
                     <SelectItem value="bueye">Bueye</SelectItem>
                   </SelectContent>
